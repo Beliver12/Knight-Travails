@@ -1,26 +1,77 @@
-function knightMoves(startPosition, endPosition) {
-  const moves = [[+2, -1], [+2, +1], [+1, +2], [-1, +2], [-1, +2], [-2, +1],
-    [-2, -1], [-1, -2], [+1, -2]];
-  const checkMoves = (startPosition, current = []) => {
-    for (const move of moves) {
-      if ((startPosition.at(-2) + move[0] < 8 || startPosition.at(-2) + move[0] > -1)
-       && startPosition.at(-1) + move[1] < 8 || startPosition.at(-1) + move[1] > -1) {
-        current.push([startPosition[0] + move[0], startPosition[1] + move[1]]);
+function knightMoves(startPosition, endPosition, positions = []) {
+  // const moves = [[+2, -1], [+2, +1], [+1, +2], [-1, +2], [-1, +2], [-2, +1],
+  // [-2, -1], [-1, -2], [+1, -2]];
+  const checkPosition = (arr, x, y) => {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].includes(x, y)) {
+        return false;
       }
+      continue;
     }
-    for (let i = 0; i < current.length; i++) {
-      if (current[i][0] + moves[i][0] > 7 && current[i][0] + moves[i][0] < 0
-          && current[i][1] + moves[i][1] > 7 && current[i][1] + moves[i][1] < 0) {
-        i++;
-      }
-      current.push([current[i][0] + moves[i][0], current[i][1] + moves[i][1]]);
-    }
+    return true;
+  };
+  const moves = {
+    moveX: +2,
+    moveY: -1,
+    next: {
+      moveX: +2,
+      moveY: +1,
+      next: {
+        moveX: +1,
+        moveY: +2,
+        next: {
+          moveX: -1,
+          moveY: +2,
+          next: {
+            moveX: -1,
+            moveY: +2,
+            next: {
+              moveX: -2,
+              moveY: +1,
+              next: {
+                moveX: -2,
+                moveY: -1,
+                next: {
+                  moveX: -1,
+                  moveY: -2,
+                  next: {
+                    moveX: +1,
+                    moveY: -2,
+                    next: null,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   };
   if (startPosition[0] === endPosition[0] && startPosition[1] === endPosition[1]) {
     return startPosition;
   }
-  checkMoves(startPosition);
-  return { checkMoves };
+
+  const Q = [];
+  Q.push(startPosition[0], startPosition[1]);
+  let move = moves;
+  while (move) {
+    let x = Q.at(-2);
+    let y = Q.at(-1);
+    if ((x + move.moveX < 7 && x + move.moveX > 0) && (y + move.moveY < 7 && y + move.moveY > 0)) {
+      positions.push([x, y]);
+
+      x += move.moveX;
+      y += move.moveY;
+      if (checkPosition(positions, x, y) === true) {
+        Q.unshift(x, y);
+        Q.splice(2, 2);
+      }
+    }
+    move = move.next;
+  }
+  knightMoves(startPosition, endPosition, positions);
+
+  return { checkPosition };
 }
 
 console.log(knightMoves([3, 3], [4, 3]));
