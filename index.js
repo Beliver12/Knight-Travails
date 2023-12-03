@@ -83,7 +83,7 @@ function knightMoves(startPosition, endPosition) {
     }
   }
 
-  console.log(`From ${startPosition[0]} ${startPosition[1]} to ${endPosition[0]} ${endPosition[1]}You made it in ${nodes[0].length - 1} moves! Here's your path:`);
+  console.log(`From ${startPosition[0]} ${startPosition[1]} to ${endPosition[0]} ${endPosition[1]} You made it in ${nodes[0].length - 1} moves! Here's your path:`);
   nodes.forEach((node) => {
     node.forEach((elem) => console.log(elem[0], elem[1]));
   });
