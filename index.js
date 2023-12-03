@@ -21,8 +21,8 @@ function knightMoves(startPosition, endPosition) {
     }
     return arr;
   };
-  if (startPosition === null) {
-    return null;
+  if (startPosition[0] === endPosition[0] && startPosition[1] === endPosition[1]) {
+    return startPosition;
   }
   const dX = [+2, +2, +1, -1, -2, -2, -1, +1];
   const dY = [-1, +1, +2, +2, +1, -1, -2, -2];
@@ -58,25 +58,33 @@ function knightMoves(startPosition, endPosition) {
     if (board2[newX][newY] === -1) {
       board2[newX][newY] = 0;
     }
-    if ((newX - dX[board2[newX][newY]] < 8 && newX - dX[board2[newX][newY]] > -1)
-    && (newY - dY[board2[newX][newY]] < 8 && newY - dY[board2[newX][newY]] > -1)) {
+    if ((newX - dX[board2[newX][newY]] < 8 && newX - (dX[board2[newX][newY]]) > -1)
+    && (newY - dY[board2[newX][newY]] < 8 && (newY - (dY[board2[newX][newY]])) > -1)) {
       Q.push([newX - dX[board2[newX][newY]], newY - dY[board2[newX][newY]]]);
       if (startPosition[0] === Q[Q.length - 1][0] && startPosition[1] === Q[Q.length - 1][1]) {
         nodes.push(Q.reverse());
         break;
       }
-    } else {
+    } else if ((newX + dX[board2[newX][newY]] < 8 && newX + dX[board2[newX][newY]] > -1)
+    && (newY + dY[board2[newX][newY]] < 8 && newY + dY[board2[newX][newY]] > -1)) {
       Q.push([newX + dX[board2[newX][newY]], newY + dY[board2[newX][newY]]]);
       if (startPosition[0] === Q[Q.length - 1][0] && startPosition[1] === Q[Q.length - 1][1]) {
         nodes.push(Q.reverse());
         break;
       }
+    } else {
+    Q.push([Math.abs(newX - dX[board2[newX][newY]]), Math.abs(newY - dY[board2[newX][newY]])]);
     }
   }
 
-  console.log(`You made it in ${nodes[0].length - 1} moves! Here's your path:`);
+  console.log(`From ${startPosition[0]} ${startPosition[1]} to ${endPosition[0]} ${endPosition[1]}You made it in ${nodes[0].length - 1} moves! Here's your path:`);
   nodes.forEach((node) => {
-    node.forEach((elem) => console.log(elem));
+    node.forEach((elem) => console.log(elem[0], elem[1]));
   });
 }
+knightMoves([4, 2], [1, 2]);
+knightMoves([7, 7], [2, 2]);
+knightMoves([5, 3], [3, 3]);
 knightMoves([1, 1], [6, 6]);
+knightMoves([7, 7], [0, 0]);
+knightMoves([7, 7], [7, 7]);
